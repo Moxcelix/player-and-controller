@@ -1,9 +1,11 @@
 using UnityEngine;
 
-public interface ISitable
+namespace Core.Character
 {
-    public bool IsSitting { get; }
-    public void SitDown(Transform placePoint);
-    public void StandUp(Transform leavePoint);
+    public interface ISitable
+    {
+        public bool IsSitting { get; }
+        public void SitDown(Transform placePoint);
+        public void StandUp(Transform leavePoint);
+    }
 }
-

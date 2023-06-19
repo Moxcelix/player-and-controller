@@ -1,8 +1,10 @@
 using UnityEngine;
+using Core.Character;
 
 public class UserCharacterController : MonoBehaviour
 {
-    [SerializeField] private Core.Character.CharacterBody _characterBody;
+    [SerializeField] private CharacterBody _characterBody;
+    [SerializeField] private Seat _seat;
     [SerializeField] private KeyCode _forwardKey = KeyCode.W;
     [SerializeField] private KeyCode _backKey = KeyCode.S;
     [SerializeField] private KeyCode _rightKey = KeyCode.D;
@@ -10,16 +12,28 @@ public class UserCharacterController : MonoBehaviour
     [SerializeField] private KeyCode _jumpKey = KeyCode.Space;
     [SerializeField] private KeyCode _runKey = KeyCode.LeftControl;
     [SerializeField] private KeyCode _leaveKey = KeyCode.LeftShift;
+    [SerializeField] private KeyCode _seatKey = KeyCode.E;
     [SerializeField] private float _mouseSensitivity = 10;
 
     private bool _canMove = true;
 
     private void Update()
     {
-        var forward = _canMove && Input.GetKey(_forwardKey) ? Movement.POSITIVE : Movement.NONE;
-        var back = _canMove && Input.GetKey(_backKey) ? Movement.NEGATIVE : Movement.NONE;
-        var right = _canMove && Input.GetKey(_rightKey) ? Movement.POSITIVE : Movement.NONE;
-        var left = _canMove && Input.GetKey(_leftKey) ? Movement.NEGATIVE : Movement.NONE;
+        var forward = _canMove && Input.GetKey(_forwardKey) ? 
+            Movement.POSITIVE :
+            Movement.NONE;
+
+        var back = _canMove && Input.GetKey(_backKey) ? 
+            Movement.NEGATIVE :
+            Movement.NONE;
+
+        var right = _canMove && Input.GetKey(_rightKey) ?
+            Movement.POSITIVE :
+            Movement.NONE;
+
+        var left = _canMove && Input.GetKey(_leftKey) ?
+            Movement.NEGATIVE :
+            Movement.NONE;
 
         var horizontal = (Movement)((int)right + (int)left);
         var vertical = (Movement)((int)forward + (int)back);
@@ -39,6 +53,11 @@ public class UserCharacterController : MonoBehaviour
         if (Input.GetKeyDown(_leaveKey))
         {
             _characterBody.IsSitting = false;
+        }
+
+        if (Input.GetKeyDown(_seatKey))
+        {
+            _seat.Take(_characterBody);
         }
     }
 }

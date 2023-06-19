@@ -1,6 +1,9 @@
-public enum Movement : int
+namespace Core.Character
 {
-    POSITIVE = 1,
-    NEGATIVE = -1,
-    NONE = 0
+    public enum Movement : int
+    {
+        POSITIVE = 1,
+        NEGATIVE = -1,
+        NONE = 0
+    }
 }

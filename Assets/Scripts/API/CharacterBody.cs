@@ -1,9 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Core.Character
 {
     [RequireComponent(typeof(CharacterController))]
-    public class CharacterBody : MonoBehaviour
+    public class CharacterBody : MonoBehaviour, ISitable
     {
         [SerializeField] private Transform _headTransform;
         [SerializeField] private float _climb;
@@ -32,6 +32,12 @@ namespace Core.Character
 
         private void FixedUpdate()
         {
+            if (IsSitting)
+            {
+                ClearEnergy();
+                return;
+            }
+
             var isGrounded = IsGrounded();
             var decreaseAcceleration = isGrounded ?
                 EnvironmentResistance.Ground : 
@@ -72,6 +78,47 @@ namespace Core.Character
             _rotation.y = Mathf.Clamp(_rotation.y, -90, 90);
             _headTransform.localEulerAngles = new Vector3(-_rotation.y, 0);
             transform.eulerAngles = new Vector3(0, _rotation.x);
+        }
+
+        public void SitDown(Transform placePoint)
+        {
+            IsSitting = true;
+
+            SetParent(placePoint);
+        }
+
+        public void StandUp(Transform leavePoint)
+        {
+            RemoveParent();
+            Translate(leavePoint.position);
+
+            IsSitting = false;
+        }
+
+        public void Translate(Vector3 position)
+        {
+            ClearEnergy();
+            // unfortunately, physics is in another thread 💀
+            _characterController.enabled = false;
+            transform.position = position;
+            _characterController.enabled = true;
+        }
+
+        private void ClearEnergy()
+        {
+            _planarVelocity = Vector3.zero;
+            _verticalVelocity = 0;
+        }
+
+        private void SetParent(Transform parentTransform)
+        {
+            transform.SetParent(parentTransform);
+            transform.localPosition = Vector3.zero;
+        }
+
+        private void RemoveParent()
+        {
+            transform.SetParent(null);
         }
 
         private bool IsGrounded()
