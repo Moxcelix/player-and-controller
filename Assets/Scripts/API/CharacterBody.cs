@@ -16,6 +16,7 @@ namespace Core.Character
         private CharacterController _characterController;
         private Vector3 _acceleration;
         private Vector3 _planarVelocity;
+        private Vector3 _rotation;
         private float _verticalVelocity;
 
         public Transform HeadTransform => _headTransform;
@@ -67,9 +68,10 @@ namespace Core.Character
 
         public void UpdateView(Vector3 rotationDelta)
         {
-            rotationDelta.y = Mathf.Clamp(rotationDelta.y, -90, 90);
-            _headTransform.localEulerAngles += new Vector3(-rotationDelta.y, 0);
-            transform.eulerAngles += new Vector3(0, rotationDelta.x);
+            _rotation += rotationDelta;
+            _rotation.y = Mathf.Clamp(_rotation.y, -90, 90);
+            _headTransform.localEulerAngles = new Vector3(-_rotation.y, 0);
+            transform.eulerAngles = new Vector3(0, _rotation.x);
         }
 
         private bool IsGrounded()
