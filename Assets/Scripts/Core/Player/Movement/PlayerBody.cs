@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 
-namespace Core.Character
+namespace Core.Player
 {
     [RequireComponent(typeof(CharacterController))]
-    public class CharacterBody : MonoBehaviour, ISitable
+    public class PlayerBody : MonoBehaviour, ISitable
     {
         [SerializeField] private Transform _headTransform;
-        [SerializeField] private float _climb;
-        [SerializeField] private float _damping;
-        [SerializeField] private float _speed;
-        [SerializeField] private float _runMultiplier;
-        [SerializeField] private float _gravity;
-        [SerializeField] private float _jumpForce;
+        [SerializeField] private float _climb = 0.3f;
+        [SerializeField] private float _damping = 0.0001f;
+        [SerializeField] private float _speed = 1;
+        [SerializeField] private float _runMultiplier = 2;
+        [SerializeField] private float _gravity = 0.05f;
+        [SerializeField] private float _jumpForce = 0.1f;
 
         private CharacterController _characterController;
         private Vector3 _acceleration;
@@ -30,7 +30,7 @@ namespace Core.Character
             _planarVelocity = Vector3.zero;
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             if (IsSitting)
             {
@@ -39,13 +39,13 @@ namespace Core.Character
             }
 
             var isGrounded = IsGrounded();
-            var decreaseAcceleration = isGrounded ?
-                EnvironmentResistance.Ground : 
+            var decreasing = isGrounded ?
+                EnvironmentResistance.Ground :
                 EnvironmentResistance.Air;
-            var maxVelocity = _speed * (IsRunning ? _runMultiplier : 1f);
+            var maxVelocity = _speed * (IsRunning ? _runMultiplier : 1.1f);
 
-            _planarVelocity *= _damping * decreaseAcceleration;
-            _planarVelocity += _acceleration * Time.fixedDeltaTime;
+            _planarVelocity *= Mathf.Pow(_damping * decreasing, Time.deltaTime);
+            _planarVelocity += _acceleration * Time.deltaTime;
 
             if (_planarVelocity.magnitude > maxVelocity)
             {
@@ -54,15 +54,16 @@ namespace Core.Character
 
             if (isGrounded)
             {
-                _verticalVelocity = IsJumping ? _jumpForce : 0;
+                _verticalVelocity = IsJumping ? _jumpForce : 0.0f;
             }
             else
             {
-                _verticalVelocity += _gravity * Time.fixedDeltaTime *
-                    UnityEngine.Physics.gravity.y;
+                _verticalVelocity += _gravity *
+                    Time.deltaTime * Physics.gravity.y;
             }
 
-            _characterController.Move(_planarVelocity + _verticalVelocity * Vector3.up);
+            _characterController.Move(_planarVelocity 
+                + _verticalVelocity * Vector3.up);
         }
 
         public void Move(Movement horizontal, Movement vertical)
@@ -77,12 +78,13 @@ namespace Core.Character
             _rotation += rotationDelta;
             _rotation.y = Mathf.Clamp(_rotation.y, -90, 90);
             _headTransform.localEulerAngles = new Vector3(-_rotation.y, 0);
-            transform.eulerAngles = new Vector3(0, _rotation.x);
+            transform.localEulerAngles = new Vector3(0, _rotation.x);
         }
 
         public void SitDown(Transform placePoint)
         {
             IsSitting = true;
+            _characterController.enabled = false;
 
             SetParent(placePoint);
         }
@@ -93,15 +95,13 @@ namespace Core.Character
             Translate(leavePoint.position);
 
             IsSitting = false;
+            _characterController.enabled = true;
         }
 
         public void Translate(Vector3 position)
         {
             ClearEnergy();
-            // unfortunately, physics is in another thread 💀
-            _characterController.enabled = false;
             transform.position = position;
-            _characterController.enabled = true;
         }
 
         private void ClearEnergy()

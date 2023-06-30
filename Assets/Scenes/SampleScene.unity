@@ -508,7 +508,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1256032098}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca23c8937cb6f044d86a06fb9655527e, type: 3}
+  m_Script: {fileID: 11500000, guid: 59afe81e5b856814d86976f7b321338c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _placePoint: {fileID: 1396551845}
@@ -537,7 +537,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1396551844}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.3, z: 0}
+  m_LocalPosition: {x: 0, y: 0.936, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -568,7 +568,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1649453489}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2.75}
+  m_LocalPosition: {x: 0, y: 1.037, z: 2.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -603,16 +603,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1957075527}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0f66bb94891d8f498bc15249106c2ba, type: 3}
+  m_Script: {fileID: 11500000, guid: c080a256e154a744d966f31422bf3545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _headTransform: {fileID: 963194228}
-  _climb: 2
-  _damping: 0.95
+  _climb: 0.3
+  _damping: 0.001
   _speed: 1
   _runMultiplier: 2
-  _gravity: 0.1
-  _jumpForce: 0.3
+  _gravity: 0.05
+  _jumpForce: 0.1
 --- !u!143 &1957075529
 CharacterController:
   m_ObjectHideFlags: 0
@@ -640,11 +640,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1957075527}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85a50adb0735f4547a658eb44c9ca8d0, type: 3}
+  m_Script: {fileID: 11500000, guid: b529ec066b8b3ce47b533f42bfd96f49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterBody: {fileID: 1957075528}
-  _seat: {fileID: 1256032103}
+  _playerBody: {fileID: 1957075528}
+  _seatPlace: {fileID: 1256032103}
   _forwardKey: 119
   _backKey: 115
   _rightKey: 100
@@ -653,7 +653,7 @@ MonoBehaviour:
   _runKey: 306
   _leaveKey: 304
   _seatKey: 101
-  _mouseSensitivity: 10
+  _mouseSensitivity: 2
 --- !u!4 &1957075531
 Transform:
   m_ObjectHideFlags: 0
@@ -662,7 +662,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1957075527}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.2, z: 0}
+  m_LocalPosition: {x: 0, y: 3.98, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
